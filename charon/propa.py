@@ -266,8 +266,8 @@ def Pack(ch,DMm,mass_v,folder):
 		files =  sorted(glob.glob(folder+"{}_{:.1f}_{:.1f}_*_--{}.dat".format(ch,DMm,mass_v,i)),key=lambda s:key(s))
 		flux_list[i]   = []
 		for j in files:
-			data   = np.genfromtxt(j)
 			global data
+			data   = np.genfromtxt(j)
 			flux_list[i] += list(data[:,1])
 		flux_list[flavor[i]] = np.transpose(np.array(flux_list[i]).reshape(len(files),len(data)))
 	energy = data[:,0]
