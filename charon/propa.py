@@ -265,20 +265,21 @@ def Pack(ch,DMm,mass_v,folder):
 	for i in range(6):
 		files =  sorted(glob.glob(folder+"{}_{:.1f}_{:.1f}_*_--{}.dat".format(ch,DMm,mass_v,i)),key=lambda s:key(s))
 		flux_list[i]   = []
+		global dataa
 		for j in files:
-			data   = np.genfromtxt(j)
-			flux_list[i] += list(data[:,1])
-		flux_list[flavor[i]] = np.transpose(np.array(flux_list[i]).reshape(len(files),len(data)))
-	energy = data[:,0]
+			dataa   = np.genfromtxt(j)
+			flux_list[i] += list(dataa[:,1])
+		flux_list[flavor[i]] = np.transpose(np.array(flux_list[i]).reshape(len(files),len(dataa)))
+	energy = dataa[:,0]
 	x_data = energy/float(DMm)
-	flux = np.zeros((len(data),len(files)),dtype=[('x','float'),('rho','float'),
+	flux = np.zeros((len(dataa),len(files)),dtype=[('x','float'),('rho','float'),
 			       ('nu_e', 'float'), ('nu_e_bar', 'float'),
 			       ('nu_mu', 'float'), ('nu_mu_bar', 'float'),
 			       ('nu_tau', 'float'), ('nu_tau_bar', 'float')])
 	for i in range(6):
 		flux[flavor[i]] = flux_list[flavor[i]]
-	flux['x']    = np.repeat(x_data,len(files)).reshape(len(data),len(files))
-	flux['rho']  = np.transpose(np.array([key(s) for s in files]*len(data))).reshape(len(data),len(files))
+	flux['x']    = np.repeat(x_data,len(files)).reshape(len(dataa),len(files))
+	flux['rho']  = np.transpose(np.array([key(s) for s in files]*len(dataa))).reshape(len(dataa),len(files))
 	np.save(folder+"{}_{:.1f}_{:.1f}.npy".format(ch,DMm,mass_v),flux)
 	return flux
 
